@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Pixel Portal | MediaMarkt Saturn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        google: {
+                            blue: '#4285F4',
+                            red: '#EA4335',
+                            yellow: '#FBBC05',
+                            green: '#34A853',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f0f11;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Glowing Background Orbs */
+        .bg-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: -1;
+            animation: float 20s infinite ease-in-out alternate;
+            opacity: 0.5;
+        }
+        .orb-1 { width: 400px; height: 400px; background: #4285F4; top: -100px; left: -100px; }
+        .orb-2 { width: 500px; height: 500px; background: #EA4335; bottom: -200px; right: -100px; animation-delay: -5s; }
+        .orb-3 { width: 300px; height: 300px; background: #FBBC05; top: 30%; left: 40%; animation-delay: -10s; opacity: 0.3; }
+
+        @keyframes float {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(50px, 50px) scale(1.1); }
+        }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        .glass-input {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .glass-input:focus {
+            outline: none;
+            border-color: #4285F4;
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
+
+        .hidden-view { display: none !important; }
+        
+        /* Star Rating */
+        .star-rating input { display: none; }
+        .star-rating label {
+            cursor: pointer;
+            width: 2rem;
+            height: 2rem;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3e%3c/polygon%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            transition: all 0.2s;
+        }
+        .star-rating input:checked ~ label {
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FBBC05' stroke='%23FBBC05' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3e%3c/polygon%3e%3c/svg%3e");
+        }
+        .star-rating label:hover,
+        .star-rating label:hover ~ label {
+            transform: scale(1.1);
+        }
+
+        /* Modal Transitions */
+        .modal-enter { opacity: 0; transform: scale(0.95); }
+        .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
+        .modal-exit { opacity: 1; transform: scale(1); }
+        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 300ms, transform 300ms; }
+
+        .tab-active { border-bottom: 2px solid #34A853; color: #34A853; }
+        .tab-inactive { border-bottom: 2px solid transparent; color: #9ca3af; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col font-sans relative">
+
+    <!-- Background Orbs -->
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="bg-orb orb-3"></div>
+
+    <!-- Header Navigation -->
+    <header class="w-full p-6 flex justify-between items-center z-10 glass-panel !rounded-none !border-t-0 !border-x-0 !border-b-white/10 sticky top-0 bg-black/30">
+        <div class="flex items-center gap-4">
+            <!-- Google G Logo -->
+            <svg class="w-8 h-8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+            </svg>
+            <span class="text-xl font-medium tracking-wide">Pixel Retail Portal</span>
+        </div>
+        <div class="flex items-center gap-4">
+            <!-- MMS Logo Placeholder -->
+            <div class="flex items-center space-x-1 h-8">
+                <div class="bg-[#df0000] text-white font-bold px-2 py-1 text-sm rounded-l-md italic">MediaMarkt</div>
+                <div class="bg-black text-white font-bold px-2 py-1 text-sm border border-[#df0000] rounded-r-md">SATURN</div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow flex items-center justify-center p-4 z-10 w-full max-w-7xl mx-auto">
+        
+        <!-- ================= VIEW 1: LOGIN / REGISTRATION ================= -->
+        <div id="login-view" class="w-full max-w-lg glass-panel p-8 md:p-10 animate-fade-in my-10">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl font-bold mb-2">Willkommen</h1>
+                <p class="text-gray-300 text-sm">Bitte melde dich an, um dich für das Pixel Loaner Programm zu registrieren, auf GRT Trainings zuzugreifen und dein TSM Team zu finden.</p>
+            </div>
+
+            <form id="login-form" class="space-y-5">
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Position auswählen</label>
+                    <select id="role" required class="w-full p-3 rounded-xl glass-input appearance-none cursor-pointer">
+                        <option value="" disabled selected class="text-gray-500">Bitte wählen...</option>
+                        <option value="GeschäftsführerIn" class="text-black">GeschäftsführerIn</option>
+                        <option value="KoordinatorIn" class="text-black">KoordinatorIn</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Vorname</label>
+                        <input type="text" id="firstname" required class="w-full p-3 rounded-xl glass-input" placeholder="Max">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-1">Nachname</label>
+                        <input type="text" id="lastname" required class="w-full p-3 rounded-xl glass-input" placeholder="Mustermann">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">Marktnummer</label>
+                    <input type="text" id="storenumber" required class="w-full p-3 rounded-xl glass-input" placeholder="z.B. 1234">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-300 mb-1">E-Mail Adresse</label>
+                    <input type="email" id="email" required class="w-full p-3 rounded-xl glass-input" placeholder="max.mustermann@mediamarktsaturn.com">
+                </div>
+
+                <div class="mt-6 bg-black/20 p-4 rounded-xl border border-white/5">
+                    <label class="flex items-start gap-3 cursor-pointer">
+                        <input type="checkbox" id="privacy-check" class="mt-1 w-5 h-5 rounded border-gray-400 bg-transparent text-google-blue focus:ring-google-blue focus:ring-offset-gray-900 cursor-pointer">
+                        <span class="text-xs text-gray-300 leading-relaxed">
+                            Ich bin damit einverstanden, dass meine von mir angegebenen personenbezogenen Daten (Name, Vorname, Marktnummer sowie meine E-Mail-Adresse) von der TMS Personal GmbH zum Zweck der Bereitstellung des Google Pixel Portals, der Organisation des Loaner Programms sowie zur Verarbeitung meines Feedbacks verarbeitet und genutzt werden dürfen. Dies beinhaltet auch die Kontaktaufnahme zur weiteren Abstimmung des Leihgerätes. Diese Einwilligung ist freiwillig und kann jederzeit mit Wirkung für die Zukunft gegenüber der TMS Personal GmbH widerrufen werden.
+                        </span>
+                    </label>
+                </div>
+
+                <button type="submit" id="submit-login" disabled class="w-full py-4 mt-6 rounded-xl font-semibold text-white bg-white/10 border border-white/20 opacity-50 cursor-not-allowed transition-all duration-300">
+                    Weiter zum Portal
+                </button>
+            </form>
+        </div>
+
+
+        <!-- ================= VIEW 2: DASHBOARD ================= -->
+        <div id="dashboard-view" class="w-full hidden-view py-10">
+            <div class="mb-10">
+                <h1 class="text-4xl md:text-5xl font-bold mb-2">Hallo <span id="user-display-name" class="text-google-blue"></span>,</h1>
+                <p class="text-xl text-gray-300">Willkommen in deinem persönlichen Pixel Portal (<span id="user-display-role"></span>, Markt <span id="user-display-store"></span>).</p>
+            </div>
+
+            <!-- Dashboard Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Card 1: Loaner Programm -->
+                <div class="glass-panel p-6 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-google-blue rounded-full filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <div class="mb-4 bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/10">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Loaner Programm</h2>
+                    <p class="text-gray-300 text-sm mb-6 flex-grow">Erlebe das Google Pixel selbst. Melde dich hier für ein exklusives Leihhandy für ein gesamtes Jahr an und entdecke alle KI-Funktionen im Alltag.</p>
+                    <button id="btn-loaner" class="w-full py-3 rounded-lg bg-google-blue hover:bg-blue-600 text-white font-medium transition-colors shadow-[0_0_15px_rgba(66,133,244,0.4)]">
+                        Jetzt für 1 Jahr sichern
+                    </button>
+                    <div id="loaner-success" class="hidden mt-3 text-sm text-green-400 font-medium text-center">
+                        Erfolgreich eingetragen! Wir kontaktieren dich in Kürze.
+                    </div>
+                </div>
+
+                <!-- Card 2: GRT Training -->
+                <div class="glass-panel p-6 flex flex-col relative overflow-hidden group">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-google-green rounded-full filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <div class="mb-4 bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/10">
+                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-2">Google Retail Training</h2>
+                    <p class="text-gray-300 text-sm mb-6 flex-grow">Steigere dein Wissen! Greife auf die offizielle GRT-Plattform zu, um die neuesten Trainings zu Pixel, Fitbit und Nest abzuschließen.</p>
+                    <a href="https://googleretailtraining.exceedlms.com/student/catalog" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white font-medium transition-colors text-center block">
+                        Zum GRT Portal
+                    </a>
+                </div>
+
+                <!-- Card 3: Feedback & Training Choice -->
+                <div class="glass-panel p-6 flex flex-col relative overflow-hidden group lg:col-span-1 md:col-span-2">
+                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-google-yellow rounded-full filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
+                    <h2 class="text-2xl font-bold mb-4">Dein Feedback</h2>
+                    
+                    <form id="feedback-form" class="space-y-4 flex-grow">
+                        <!-- Q1 -->
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-1">Würdest du das Google Pixel weiterempfehlen?</label>
+                            <div class="flex flex-row-reverse justify-end gap-1 star-rating" id="rating-recommend">
+                                <input type="radio" id="rec-5" name="recommend" value="5" required><label for="rec-5" title="5 Sterne"></label>
+                                <input type="radio" id="rec-4" name="recommend" value="4"><label for="rec-4" title="4 Sterne"></label>
+                                <input type="radio" id="rec-3" name="recommend" value="3"><label for="rec-3" title="3 Sterne"></label>
+                                <input type="radio" id="rec-2" name="recommend" value="2"><label for="rec-2" title="2 Sterne"></label>
+                                <input type="radio" id="rec-1" name="recommend" value="1"><label for="rec-1" title="1 Stern"></label>
+                            </div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-1">Wie hilfreich war das Training?</label>
+                            <div class="flex flex-row-reverse justify-end gap-1 star-rating" id="rating-training">
+                                <input type="radio" id="trn-5" name="training_help" value="5" required><label for="trn-5"></label>
+                                <input type="radio" id="trn-4" name="training_help" value="4"><label for="trn-4"></label>
+                                <input type="radio" id="trn-3" name="training_help" value="3"><label for="trn-3"></label>
+                                <input type="radio" id="trn-2" name="training_help" value="2"><label for="trn-2"></label>
+                                <input type="radio" id="trn-1" name="training_help" value="1"><label for="trn-1"></label>
+                            </div>
+                        </div>
+
+                        <!-- Q3 -->
+                        <div>
+                            <label class="block text-sm text-gray-300 mb-2">Welches Trainingsformat wünschst du dir?</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="format" value="Vor Ort" required class="text-google-yellow focus:ring-google-yellow bg-transparent border-gray-400">
+                                    <span class="text-sm">Vor Ort</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="format" value="Digital" class="text-google-yellow focus:ring-google-yellow bg-transparent border-gray-400">
+                                    <span class="text-sm">Digital</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Q4: NEU - Interesse am Leihhandy -->
+                        <div class="pt-2 border-t border-white/10">
+                            <label class="block text-sm text-gray-300 mb-2">Hast du Interesse an einem Leihhandy (Loaner)?</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="loaner_interest" value="Ja" required class="text-google-blue focus:ring-google-blue bg-transparent border-gray-400">
+                                    <span class="text-sm">Ja, gerne</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="loaner_interest" value="Nein" class="text-google-blue focus:ring-google-blue bg-transparent border-gray-400">
+                                    <span class="text-sm">Nein, danke</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="w-full py-2.5 mt-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white font-medium transition-colors text-sm">
+                            Feedback absenden
+                        </button>
+                        <div id="feedback-success" class="hidden text-sm text-green-400 mt-2 text-center">Vielen Dank für dein Feedback!</div>
+                    </form>
+                </div>
+
+                <!-- Card 4: TSM Team (Launcher for Modal) -->
+                <div class="glass-panel p-6 relative overflow-hidden lg:col-span-3 md:col-span-2 flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-6 group cursor-pointer" onclick="openTsmModal()">
+                    <div class="absolute -right-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-google-red rounded-full filter blur-[100px] opacity-10 group-hover:opacity-30 transition-opacity"></div>
+                    
+                    <div class="flex items-center gap-6">
+                        <div class="bg-white/10 p-4 rounded-full border border-white/10">
+                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold mb-1">Deine TSM Teams</h2>
+                            <p class="text-gray-300 text-sm">Entdecke deine Ansprechpartner für die Regionen North und West.</p>
+                        </div>
+                    </div>
+                    
+                    <button class="py-3 px-8 rounded-lg bg-white text-black hover:bg-gray-200 font-bold transition-colors whitespace-nowrap shadow-lg">
+                        Übersicht öffnen
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="text-center p-6 text-xs text-gray-500 z-10">
+        &copy; 2026 TMS Personal GmbH | Bereitgestellt für das Google Retail Projekt.
+    </footer>
+
+    <!-- ================= TSM MODAL (EXTRA WINDOW) ================= -->
+    <div id="tsm-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 lg:p-10 opacity-0 transition-opacity duration-300">
+        
+        <div class="glass-panel w-full max-w-7xl h-[95vh] flex flex-col relative transform scale-95 transition-transform duration-300" id="tsm-modal-content">
+            
+            <!-- Header & Tabs -->
+            <div class="flex flex-col sm:flex-row justify-between items-center p-6 border-b border-white/10 gap-4">
+                <h2 class="text-2xl font-bold tracking-wider">TSM TEAM KONTAKTE</h2>
+                
+                <!-- Tab Buttons -->
+                <div class="flex gap-6 font-medium text-lg">
+                    <button onclick="switchTab('north')" id="tab-btn-north" class="pb-1 tab-active transition-colors hover:text-white">REGION NORTH</button>
+                    <button onclick="switchTab('west')" id="tab-btn-west" class="pb-1 tab-inactive transition-colors hover:text-white">REGION WEST</button>
+                </div>
+
+                <button onclick="closeTsmModal()" class="text-gray-400 hover:text-white p-2 bg-white/5 rounded-full transition-colors absolute sm:static right-4 top-4">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <!-- Scrollable Content Area -->
+            <div class="flex-grow overflow-y-auto p-6 relative">
+                
+                <!-- ================= TAB: REGION NORTH ================= -->
+                <div id="tab-north" class="block animate-fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8 items-center h-full">
+                        
+                        <!-- Left Column (5 TSMs) -->
+                        <div class="flex flex-col gap-6">
+                            
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">KORAYHAN SEYHUN</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 772 92 17</p>
+                                    <a href="mailto:korayhan.seyhun.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: korayhan.seyhun.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">KS</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">SENAD BERISA</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 152 244 703 87</p>
+                                    <a href="mailto:Senad.Berisa.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: Senad.Berisa.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">SB</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">STEVEN RUPPRECHT</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 152 5167 20 35</p>
+                                    <a href="mailto:steven.rupprecht.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: steven.rupprecht.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">SR</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">JAN SCHREIBER</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 74</p>
+                                    <a href="mailto:jan.schreiber.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: jan.schreiber.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">JS</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">JOANNA ZEIDLER</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 1520 340 19 18</p>
+                                    <a href="mailto:joanna.zeidler.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: joanna.zeidler.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">JZ</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Middle Map (North Highlight) -->
+                        <div class="hidden lg:flex justify-center items-center">
+                            <svg viewBox="0 0 400 550" class="w-[300px] xl:w-[380px] h-auto drop-shadow-[0_0_25px_rgba(52,168,83,0.15)] opacity-90">
+                                <defs>
+                                    <linearGradient id="northRegion" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="42%" stop-color="#1B5E20"/> 
+                                        <stop offset="42.1%" stop-color="#374151"/> 
+                                        <stop offset="100%" stop-color="#374151"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M196,15 L220,15 L225,25 L245,35 L240,50 L270,55 L285,45 L310,85 L290,110 L315,120 L350,110 L360,135 L345,160 L355,190 L380,210 L360,280 L365,310 L335,330 L350,370 L300,420 L320,440 L310,480 L285,475 L280,510 L260,510 L250,530 L210,545 L170,530 L160,515 L115,525 L95,500 L120,460 L100,420 L75,410 L85,360 L50,320 L55,270 L80,250 L60,210 L75,185 L95,190 L120,165 L115,135 L125,115 L155,125 L165,80 L180,60 L185,25 Z" fill="url(#northRegion)" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linejoin="round"/>
+                                <path d="M165,80 L195,120 L240,110 M195,120 L210,180 L280,200 M115,135 L145,170 M210,180 L180,240 L110,240 M280,200 L260,260 L320,290 M180,240 L210,310 M260,260 L230,330 M210,310 L230,330 L220,400 M110,240 L100,310 L160,350 M160,350 L220,400 M230,330 L290,370 M220,400 L260,460" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            </svg>
+                        </div>
+
+                        <!-- Right Column (5 TSMs incl. Lead) -->
+                        <div class="flex flex-col gap-6">
+
+                            <!-- LEAD -->
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                                    <span class="text-base font-bold text-white">MW</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">MARCO WOLF</h3>
+                                    <p class="text-[11px] text-gray-300">Regional Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 1520 473 50 94</p>
+                                    <a href="mailto:marco.wolf.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: marco.wolf.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">ND</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">NICLAS DÄDLER</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 244 70 381</p>
+                                    <a href="mailto:niclas.daedler.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: niclas.daedler.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">MM</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">MATHIAS MÜNCH</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 174 242 41 06</p>
+                                    <a href="mailto:mathias.muench.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: mathias.muench.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">MG</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">MARCEL GADE</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 70</p>
+                                    <a href="mailto:marcel.gade.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: marcel.gade.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">KM</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">KORAY MUSAOGLU</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 71</p>
+                                    <a href="mailto:Koray.Musaoglu.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: Koray.Musaoglu.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ================= TAB: REGION WEST ================= -->
+                <div id="tab-west" class="hidden animate-fade-in">
+                    <div class="grid grid-cols-1 lg:grid-cols-[1fr_auto_1fr] gap-8 items-center h-full">
+                        
+                        <!-- Left Column (5 TSMs incl. Lead) -->
+                        <div class="flex flex-col gap-6">
+                            
+                            <!-- LEAD -->
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">DANIEL MURRAY</h3>
+                                    <p class="text-[11px] text-gray-300">Sales Lead West</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 162 106 91 58</p>
+                                    <a href="mailto:daniel.murray.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: daniel.murray.de@gretail.com</a>
+                                </div>
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                                    <span class="text-base font-bold text-white">DM</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">SEDAT ANTIL</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 73</p>
+                                    <a href="mailto:sedat.antil.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: sedat.antil.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">SA</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">GEORGE SAMANDER</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 68</p>
+                                    <a href="mailto:george.samandar.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: george.samandar.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">GS</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">RAFAEL BORON</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 257 43 89</p>
+                                    <a href="mailto:rafael.boron.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: rafael.boron.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">RB</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">DAVID GLASMACHER</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 66</p>
+                                    <a href="mailto:david.glasmacher.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: david.glasmacher.de@gretail.com</a>
+                                </div>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">DG</span>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Middle Map (West Highlight) -->
+                        <div class="hidden lg:flex justify-center items-center">
+                            <svg viewBox="0 0 400 550" class="w-[300px] xl:w-[380px] h-auto drop-shadow-[0_0_25px_rgba(52,168,83,0.15)] opacity-90">
+                                <defs>
+                                    <linearGradient id="westRegion" x1="0" y1="0" x2="1" y2="0">
+                                        <stop offset="38%" stop-color="#1B5E20"/> 
+                                        <stop offset="38.1%" stop-color="#374151"/> 
+                                        <stop offset="100%" stop-color="#374151"/>
+                                    </linearGradient>
+                                </defs>
+                                <path d="M196,15 L220,15 L225,25 L245,35 L240,50 L270,55 L285,45 L310,85 L290,110 L315,120 L350,110 L360,135 L345,160 L355,190 L380,210 L360,280 L365,310 L335,330 L350,370 L300,420 L320,440 L310,480 L285,475 L280,510 L260,510 L250,530 L210,545 L170,530 L160,515 L115,525 L95,500 L120,460 L100,420 L75,410 L85,360 L50,320 L55,270 L80,250 L60,210 L75,185 L95,190 L120,165 L115,135 L125,115 L155,125 L165,80 L180,60 L185,25 Z" fill="url(#westRegion)" stroke="rgba(255,255,255,0.2)" stroke-width="2" stroke-linejoin="round"/>
+                                <path d="M165,80 L195,120 L240,110 M195,120 L210,180 L280,200 M115,135 L145,170 M210,180 L180,240 L110,240 M280,200 L260,260 L320,290 M180,240 L210,310 M260,260 L230,330 M210,310 L230,330 L220,400 M110,240 L100,310 L160,350 M160,350 L220,400 M230,330 L290,370 M220,400 L260,460" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1.5" stroke-dasharray="4,4"/>
+                            </svg>
+                        </div>
+
+                        <!-- Right Column (5 TSMs) -->
+                        <div class="flex flex-col gap-6">
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">PW</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">PASCAL WANAT</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 772 96 81</p>
+                                    <a href="mailto:pascal.wanat.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: pascal.wanat.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">FS</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">FATIH SARAC</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 69</p>
+                                    <a href="mailto:fatih.sarac.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: fatih.sarac.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">AO</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">ALEXANDER OTTO</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 152 090 230 62</p>
+                                    <a href="mailto:alexander.otto.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: alexander.otto.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors">
+                                    <span class="text-sm font-bold">IE</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">ILKKAN EKIZTAS</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 67</p>
+                                    <a href="mailto:ilkkan.ekiztas.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: ilkkan.ekiztas.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 w-full group">
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-green transition-colors relative">
+                                    <span class="absolute -top-1 -right-2 bg-google-red text-white text-[8px] font-bold px-1 rounded">01.01.</span>
+                                    <span class="text-sm font-bold">FS</span>
+                                </div>
+                                <div class="text-left flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">FREDERICK SCHUMANN</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 176 69 22</p>
+                                    <a href="mailto:Frederick.Schumann.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: Frederick.Schumann.de@gretail.com</a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // HIER IST DEINE NEUE GOOGLE APPS SCRIPT WEB-APP URL:
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVqWsjdepY90uq1yREHvreTBIe0t-8xTV5UBZX-kyG-0A6kYzSWkQ5a7rQp9CFvbTcSA/exec';
+        
+        let currentUserData = {};
+
+        function sendDataToSheet(eventType, additionalData = {}) {
+            if (!SCRIPT_URL || SCRIPT_URL === '') return;
+            const payload = { eventType: eventType, ...currentUserData, ...additionalData };
+            fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'no-cors', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            }).catch(error => console.error('Fehler beim Senden:', error));
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const privacyCheck = document.getElementById('privacy-check');
+            const submitLoginBtn = document.getElementById('submit-login');
+            const loginForm = document.getElementById('login-form');
+            const loginView = document.getElementById('login-view');
+            const dashboardView = document.getElementById('dashboard-view');
+
+            privacyCheck.addEventListener('change', (e) => {
+                if(e.target.checked) {
+                    submitLoginBtn.disabled = false;
+                    submitLoginBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-white/10');
+                    submitLoginBtn.classList.add('bg-white', 'text-black', 'hover:bg-gray-200');
+                } else {
+                    submitLoginBtn.disabled = true;
+                    submitLoginBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-white/10');
+                    submitLoginBtn.classList.remove('bg-white', 'text-black', 'hover:bg-gray-200');
+                }
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const role = document.getElementById('role').value;
+                const firstname = document.getElementById('firstname').value;
+                const lastname = document.getElementById('lastname').value;
+                const store = document.getElementById('storenumber').value;
+                const email = document.getElementById('email').value;
+
+                currentUserData = { role, firstname, lastname, storenumber: store, email };
+                sendDataToSheet('Login');
+
+                document.getElementById('user-display-name').textContent = firstname;
+                document.getElementById('user-display-role').textContent = role;
+                document.getElementById('user-display-store').textContent = store;
+
+                loginView.classList.add('hidden-view');
+                dashboardView.classList.remove('hidden-view');
+                dashboardView.classList.add('animate-fade-in');
+            });
+
+            const btnLoaner = document.getElementById('btn-loaner');
+            const loanerSuccess = document.getElementById('loaner-success');
+            btnLoaner.addEventListener('click', () => {
+                btnLoaner.innerHTML = `
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Wird verarbeitet...
+                `;
+                sendDataToSheet('Loaner Anmeldung');
+                setTimeout(() => {
+                    btnLoaner.style.display = 'none';
+                    loanerSuccess.classList.remove('hidden');
+                }, 1500);
+            });
+
+            const feedbackForm = document.getElementById('feedback-form');
+            const feedbackSuccess = document.getElementById('feedback-success');
+            feedbackForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const submitBtn = feedbackForm.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Sende...';
+                
+                const recommend = feedbackForm.querySelector('input[name="recommend"]:checked')?.value || '';
+                const training = feedbackForm.querySelector('input[name="training_help"]:checked')?.value || '';
+                const format = feedbackForm.querySelector('input[name="format"]:checked')?.value || '';
+                const loanerInterest = feedbackForm.querySelector('input[name="loaner_interest"]:checked')?.value || '';
+
+                sendDataToSheet('Feedback', { 
+                    recommend: recommend, 
+                    training_help: training, 
+                    format: format,
+                    loaner_interest: loanerInterest
+                });
+
+                setTimeout(() => {
+                    submitBtn.style.display = 'none';
+                    feedbackSuccess.classList.remove('hidden');
+                }, 1000);
+            });
+        });
+
+        /* --- MODAL LOGIC --- */
+        const tsmModal = document.getElementById('tsm-modal');
+        const tsmModalContent = document.getElementById('tsm-modal-content');
+
+        function openTsmModal() {
+            tsmModal.classList.remove('hidden');
+            void tsmModal.offsetWidth;
+            tsmModal.classList.remove('opacity-0');
+            tsmModalContent.classList.remove('scale-95');
+        }
+
+        function closeTsmModal() {
+            tsmModal.classList.add('opacity-0');
+            tsmModalContent.classList.add('scale-95');
+            setTimeout(() => {
+                tsmModal.classList.add('hidden');
+            }, 300);
+        }
+
+        tsmModal.addEventListener('click', (e) => {
+            if (e.target === tsmModal) {
+                closeTsmModal();
+            }
+        });
+
+        /* --- TAB SWITCHING LOGIC --- */
+        function switchTab(region) {
+            const tabNorth = document.getElementById('tab-north');
+            const tabWest = document.getElementById('tab-west');
+            const btnNorth = document.getElementById('tab-btn-north');
+            const btnWest = document.getElementById('tab-btn-west');
+
+            if(region === 'north') {
+                tabNorth.classList.remove('hidden');
+                tabWest.classList.add('hidden');
+                btnNorth.className = 'pb-1 tab-active transition-colors hover:text-white';
+                btnWest.className = 'pb-1 tab-inactive transition-colors hover:text-white';
+            } else {
+                tabWest.classList.remove('hidden');
+                tabNorth.classList.add('hidden');
+                btnWest.className = 'pb-1 tab-active transition-colors hover:text-white';
+                btnNorth.className = 'pb-1 tab-inactive transition-colors hover:text-white';
+            }
+        }
+    </script>
+</body>
+</html>
