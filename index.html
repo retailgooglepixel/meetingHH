@@ -109,65 +109,6 @@
 
         .tab-active { border-bottom: 2px solid #34A853; color: #34A853; }
         .tab-inactive { border-bottom: 2px solid transparent; color: #9ca3af; }
-
-        /* Custom Dashed Arrows for Map Targeting */
-        .dashed-arrow-left {
-            position: absolute;
-            top: 50%;
-            left: calc(100% + 1rem); /* start exactly after avatar */
-            border-top: 2px dashed #34A853;
-            transform-origin: left center;
-            opacity: 0.5;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            z-index: 20;
-        }
-        .dashed-arrow-left::after {
-            content: '';
-            position: absolute;
-            right: -6px;
-            top: -6px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent transparent transparent #34A853;
-            transition: border-color 0.3s ease;
-        }
-        .group:hover .dashed-arrow-left {
-            opacity: 1;
-            border-top-color: #4285F4;
-        }
-        .group:hover .dashed-arrow-left::after {
-            border-color: transparent transparent transparent #4285F4;
-        }
-
-        .dashed-arrow-right {
-            position: absolute;
-            top: 50%;
-            right: calc(100% + 1rem); /* start right to point left */
-            border-top: 2px dashed #34A853;
-            transform-origin: right center;
-            opacity: 0.5;
-            transition: all 0.3s ease;
-            pointer-events: none;
-            z-index: 20;
-        }
-        .dashed-arrow-right::after {
-            content: '';
-            position: absolute;
-            left: -6px;
-            top: -6px;
-            border-width: 5px;
-            border-style: solid;
-            border-color: transparent #34A853 transparent transparent;
-            transition: border-color 0.3s ease;
-        }
-        .group:hover .dashed-arrow-right {
-            opacity: 1;
-            border-top-color: #4285F4;
-        }
-        .group:hover .dashed-arrow-right::after {
-            border-color: transparent #4285F4 transparent transparent;
-        }
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col font-sans relative">
@@ -385,7 +326,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="text-center p-6 text-xs text-gray-500 z-10">
+    <footer class="text-center p-6 text-xs text-gray-500 z-10 relative">
         &copy; 2026 TMS Personal GmbH | Bereitgestellt für das Google Retail Projekt.
     </footer>
 
@@ -419,8 +360,7 @@
                         <!-- Left Column (5 TSMs) -->
                         <div class="flex flex-col gap-6 lg:gap-10 w-full z-20">
                             
-                            <!-- Avatar mit Pfeil -->
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">KORAYHAN SEYHUN</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -429,12 +369,15 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">KS</span>
+                                    <!-- Flexbox Pfeil nach rechts -->
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(-20deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <!-- Der Pfeil zeigt nach oben-rechts auf Schleswig-Holstein/Hamburg -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(50px, 8vw, 110px); transform: rotate(-25deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">SENAD BERISA</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -443,12 +386,14 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">SB</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(-5deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <!-- Pfeil auf Bremen/Niedersachsen Nord -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(60px, 9vw, 120px); transform: rotate(-10deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">STEVEN RUPPRECHT</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -457,12 +402,14 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">SR</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(5deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <!-- Pfeil auf zentral Niedersachsen -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(70px, 10vw, 130px); transform: rotate(5deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">JAN SCHREIBER</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -471,12 +418,14 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">JS</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(15deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <!-- Pfeil auf Süd-Niedersachsen -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(60px, 9vw, 120px); transform: rotate(20deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">JOANNA ZEIDLER</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -485,16 +434,18 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">JZ</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(30deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <!-- Pfeil nach unten-rechts Sachsen-Anhalt/Thüringen -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(50px, 8vw, 110px); transform: rotate(35deg);"></div>
                             </div>
 
                         </div>
 
                         <!-- Middle Map (North Highlight) -->
                         <div class="hidden lg:flex justify-center items-center relative z-0">
-                            <svg viewBox="0 0 400 550" class="w-[250px] xl:w-[350px] h-auto drop-shadow-[0_0_25px_rgba(52,168,83,0.15)] opacity-90">
+                            <svg viewBox="0 0 400 550" class="w-[250px] xl:w-[350px] h-auto drop-shadow-[0_0_25px_rgba(52,168,83,0.15)] opacity-90 relative z-10">
                                 <defs>
                                     <linearGradient id="northRegion" x1="0" y1="0" x2="0" y2="1">
                                         <stop offset="45%" stop-color="#1B5E20"/> 
@@ -523,9 +474,14 @@
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">ND</span>
+                                    <!-- Flexbox Pfeil nach links -->
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(-15deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">NICLAS DÄDLER</h3>
@@ -533,13 +489,15 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 244 70 381</p>
                                     <a href="mailto:niclas.daedler.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: niclas.daedler.de@gretail.com</a>
                                 </div>
-                                <!-- Pfeil nach oben links auf MV -->
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(60px, 9vw, 120px); transform: rotate(-15deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">MM</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(-5deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">MATHIAS MÜNCH</h3>
@@ -547,13 +505,15 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 174 242 41 06</p>
                                     <a href="mailto:mathias.muench.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: mathias.muench.de@gretail.com</a>
                                 </div>
-                                <!-- Pfeil auf Brandenburg -->
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(70px, 10vw, 130px); transform: rotate(-5deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">MG</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(5deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">MARCEL GADE</h3>
@@ -561,13 +521,15 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 70</p>
                                     <a href="mailto:marcel.gade.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: marcel.gade.de@gretail.com</a>
                                 </div>
-                                <!-- Pfeil geradeaus nach Sachsen-Anhalt Ost -->
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(80px, 11vw, 140px); transform: rotate(5deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">KM</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(20deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">KORAY MUSAOGLU</h3>
@@ -575,8 +537,6 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 71</p>
                                     <a href="mailto:Koray.Musaoglu.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: Koray.Musaoglu.de@gretail.com</a>
                                 </div>
-                                <!-- Pfeil auf Sachsen -->
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(70px, 10vw, 130px); transform: rotate(20deg);"></div>
                             </div>
 
                         </div>
@@ -587,10 +547,23 @@
                 <div id="tab-west" class="hidden animate-fade-in relative h-full min-h-[600px]">
                     <div class="flex flex-col lg:grid lg:grid-cols-[1fr_auto_1fr] gap-8 items-center h-full">
                         
-                        <!-- Left Column (5 TSMs) -->
+                        <!-- Left Column (5 TSMs incl Lead) -->
                         <div class="flex flex-col gap-6 lg:gap-10 w-full z-20">
                             
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <!-- LEAD West-->
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
+                                <div class="text-left lg:text-right flex-grow">
+                                    <h3 class="font-bold text-sm text-white uppercase">DANIEL MURRAY</h3>
+                                    <p class="text-[11px] text-gray-300">Sales Lead West</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 162 106 91 58</p>
+                                    <a href="mailto:daniel.murray.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: daniel.murray.de@gretail.com</a>
+                                </div>
+                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
+                                    <span class="text-base font-bold text-white">DM</span>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">SEDAT ANTIL</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -599,12 +572,14 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">SA</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(-25deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <!-- Zeigt nach NRW Nord -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(40px, 6vw, 90px); transform: rotate(-30deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">GEORGE SAMANDER</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -613,11 +588,14 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">GS</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(-10deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(40px, 7vw, 100px); transform: rotate(-15deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">RAFAEL BORON</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -626,11 +604,14 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">RB</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(0deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(50px, 8vw, 110px); transform: rotate(0deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
+                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group">
                                 <div class="text-left lg:text-right flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">DAVID GLASMACHER</h3>
                                     <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
@@ -639,29 +620,18 @@
                                 </div>
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">DG</span>
+                                    <div class="absolute top-1/2 left-[calc(100%+10px)] hidden lg:flex items-center origin-left z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 10vw; min-width: 60px; max-width: 120px; transform: translateY(-50%) rotate(15deg);">
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-l-[10px] border-l-google-green group-hover:border-l-google-blue transition-colors -ml-[2px]"></div>
+                                    </div>
                                 </div>
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(40px, 7vw, 100px); transform: rotate(15deg);"></div>
-                            </div>
-
-                            <div class="flex items-center gap-4 justify-start lg:justify-end w-full group relative">
-                                <div class="text-left lg:text-right flex-grow">
-                                    <h3 class="font-bold text-sm text-white uppercase">PASCAL WANAT</h3>
-                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
-                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 772 96 81</p>
-                                    <a href="mailto:pascal.wanat.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: pascal.wanat.de@gretail.com</a>
-                                </div>
-                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
-                                    <span class="text-sm font-bold">PW</span>
-                                </div>
-                                <!-- Zeigt auf Saarland / Süden der West-Region -->
-                                <div class="dashed-arrow-left hidden lg:block" style="width: clamp(40px, 6vw, 90px); transform: rotate(30deg);"></div>
                             </div>
 
                         </div>
 
                         <!-- Middle Map (West Highlight) -->
                         <div class="hidden lg:flex justify-center items-center relative z-0">
-                            <svg viewBox="0 0 400 550" class="w-[250px] xl:w-[350px] h-auto drop-shadow-[0_0_25px_rgba(52,168,83,0.15)] opacity-90">
+                            <svg viewBox="0 0 400 550" class="w-[250px] xl:w-[350px] h-auto drop-shadow-[0_0_25px_rgba(52,168,83,0.15)] opacity-90 relative z-10">
                                 <defs>
                                     <linearGradient id="westRegion" x1="0" y1="0" x2="1" y2="0">
                                         <stop offset="42%" stop-color="#1B5E20"/> 
@@ -674,25 +644,32 @@
                             </svg>
                         </div>
 
-                        <!-- Right Column (4 TSMs + Lead) -->
+                        <!-- Right Column (5 TSMs West) -->
                         <div class="flex flex-col gap-6 lg:gap-10 w-full z-20">
 
-                            <!-- LEAD -->
                             <div class="flex items-center gap-4 w-full group">
-                                <div class="w-16 h-16 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white flex items-center justify-center flex-shrink-0 shadow-[0_0_15px_rgba(255,255,255,0.3)]">
-                                    <span class="text-base font-bold text-white">DM</span>
+                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
+                                    <span class="text-sm font-bold">PW</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 14vw; min-width: 90px; max-width: 180px; transform: translateY(-50%) rotate(-20deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
-                                    <h3 class="font-bold text-sm text-white uppercase">DANIEL MURRAY</h3>
-                                    <p class="text-[11px] text-gray-300">Sales Lead West</p>
-                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 162 106 91 58</p>
-                                    <a href="mailto:daniel.murray.de@gretail.com" class="text-[11px] text-google-green hover:text-white transition-colors">Email: daniel.murray.de@gretail.com</a>
+                                    <h3 class="font-bold text-sm text-white uppercase">PASCAL WANAT</h3>
+                                    <p class="text-[11px] text-gray-400">Territory Sales Manager</p>
+                                    <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 772 96 81</p>
+                                    <a href="mailto:pascal.wanat.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: pascal.wanat.de@gretail.com</a>
                                 </div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">FS</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 14vw; min-width: 90px; max-width: 180px; transform: translateY(-50%) rotate(-10deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">FATIH SARAC</h3>
@@ -700,13 +677,15 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 69</p>
                                     <a href="mailto:fatih.sarac.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: fatih.sarac.de@gretail.com</a>
                                 </div>
-                                <!-- Längere Pfeile für Right Column (West), weil sie quer über das graue Feld zeigen müssen -->
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(100px, 17vw, 220px); transform: rotate(5deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">AO</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 14vw; min-width: 90px; max-width: 180px; transform: translateY(-50%) rotate(0deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">ALEXANDER OTTO</h3>
@@ -714,12 +693,15 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 152 090 230 62</p>
                                     <a href="mailto:alexander.otto.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: alexander.otto.de@gretail.com</a>
                                 </div>
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(110px, 18vw, 230px); transform: rotate(15deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="text-sm font-bold">IE</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 14vw; min-width: 90px; max-width: 180px; transform: translateY(-50%) rotate(15deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">ILKKAN EKIZTAS</h3>
@@ -727,13 +709,16 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 144 95 67</p>
                                     <a href="mailto:ilkkan.ekiztas.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: ilkkan.ekiztas.de@gretail.com</a>
                                 </div>
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(110px, 18vw, 230px); transform: rotate(25deg);"></div>
                             </div>
 
-                            <div class="flex items-center gap-4 w-full group relative">
+                            <div class="flex items-center gap-4 w-full group">
                                 <div class="w-14 h-14 rounded-full bg-gradient-to-br from-gray-700 to-gray-900 border-2 border-white/20 flex items-center justify-center flex-shrink-0 shadow-lg group-hover:border-google-blue transition-colors relative z-10">
                                     <span class="absolute -top-1 -right-2 bg-google-red text-white text-[8px] font-bold px-1 rounded shadow">01.01.</span>
                                     <span class="text-sm font-bold">FS</span>
+                                    <div class="absolute top-1/2 right-[calc(100%+10px)] hidden lg:flex items-center origin-right z-[60] pointer-events-none opacity-60 group-hover:opacity-100 transition-all duration-300" style="width: 14vw; min-width: 90px; max-width: 180px; transform: translateY(-50%) rotate(25deg);">
+                                        <div class="w-0 h-0 border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent border-r-[10px] border-r-google-green group-hover:border-r-google-blue transition-colors -mr-[2px]"></div>
+                                        <div class="flex-grow border-t-[3px] border-dashed border-google-green group-hover:border-google-blue transition-colors"></div>
+                                    </div>
                                 </div>
                                 <div class="text-left flex-grow">
                                     <h3 class="font-bold text-sm text-white uppercase">FREDERICK SCHUMANN</h3>
@@ -741,7 +726,6 @@
                                     <p class="text-[11px] text-gray-400 mb-0.5">Tel.: +49 172 176 69 22</p>
                                     <a href="mailto:Frederick.Schumann.de@gretail.com" class="text-[11px] text-google-green group-hover:text-google-blue transition-colors">Email: Frederick.Schumann.de@gretail.com</a>
                                 </div>
-                                <div class="dashed-arrow-right hidden lg:block" style="width: clamp(100px, 17vw, 220px); transform: rotate(35deg);"></div>
                             </div>
 
                         </div>
