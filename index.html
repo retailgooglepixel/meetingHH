@@ -3,22 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Google Pixel Portal | MediaMarkt Saturn</title>
+    <title>Pixel Bootcamp - Lass dich zum Pixel-Experten ausbilden!</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Outfit', 'sans-serif'],
+                        sans: ['Poppins', 'sans-serif'],
                     },
                     colors: {
                         google: {
-                            blue: '#4285F4',
                             red: '#EA4335',
-                            yellow: '#FBBC05',
+                            blue: '#4285F4',
                             green: '#34A853',
+                            yellow: '#FBBC05',
+                            purple: '#A142F4'
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -27,492 +46,360 @@
     </script>
     <style>
         body {
-            background-color: #0f0f11;
-            color: #ffffff;
+            background-color: #f8f9fa;
             overflow-x: hidden;
         }
-
-        /* Animated Glowing Background Orbs */
-        .bg-orb {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(100px);
-            z-index: -1;
-            animation: float 20s infinite ease-in-out alternate;
-            opacity: 0.5;
-        }
-        .orb-1 { width: 400px; height: 400px; background: #4285F4; top: -100px; left: -100px; }
-        .orb-2 { width: 500px; height: 500px; background: #EA4335; bottom: -200px; right: -100px; animation-delay: -5s; }
-        .orb-3 { width: 300px; height: 300px; background: #FBBC05; top: 30%; left: 40%; animation-delay: -10s; opacity: 0.3; }
-
-        @keyframes float {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(50px, 50px) scale(1.1); }
-        }
-
-        /* Glassmorphism Utilities */
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.05);
+        
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 1.5rem;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
         }
-
-        .glass-input {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            transition: all 0.3s ease;
-        }
-        .glass-input:focus {
-            outline: none;
-            border-color: #4285F4;
-            background: rgba(0, 0, 0, 0.6);
-            box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.3);
-        }
-
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.4); }
-
-        .hidden-view { display: none !important; }
         
-        /* Star Rating */
-        .star-rating input { display: none; }
-        .star-rating label {
+        .glass-dark {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .blob-bg {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.5;
+        }
+        
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-400 { animation-delay: 0.4s; }
+        .delay-600 { animation-delay: 0.6s; }
+
+        /* Custom Checkbox Styling */
+        .custom-checkbox {
+            appearance: none;
+            background-color: rgba(255, 255, 255, 0.5);
+            margin: 0;
+            font: inherit;
+            color: currentColor;
+            width: 1.15em;
+            height: 1.15em;
+            border: 1px solid #9ca3af;
+            border-radius: 0.25em;
+            display: grid;
+            place-content: center;
             cursor: pointer;
-            width: 2rem;
-            height: 2rem;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3e%3c/polygon%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: center;
-            background-size: contain;
-            transition: all 0.2s;
-        }
-        .star-rating input:checked ~ label {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23FBBC05' stroke='%23FBBC05' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'%3e%3c/polygon%3e%3c/svg%3e");
-        }
-        .star-rating label:hover,
-        .star-rating label:hover ~ label {
-            transform: scale(1.1);
+            transition: all 0.2s ease-in-out;
         }
 
-        /* Modal Transitions */
-        .modal-enter { opacity: 0; transform: scale(0.95); }
-        .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 300ms, transform 300ms; }
-        .modal-exit { opacity: 1; transform: scale(1); }
-        .modal-exit-active { opacity: 0; transform: scale(0.95); transition: opacity 300ms, transform 300ms; }
+        .custom-checkbox::before {
+            content: "";
+            width: 0.65em;
+            height: 0.65em;
+            transform: scale(0);
+            transition: 120ms transform ease-in-out;
+            box-shadow: inset 1em 1em white;
+            background-color: white;
+            transform-origin: center;
+            clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+        }
 
-        .tab-active { border-bottom: 2px solid #34A853; color: #34A853; }
-        .tab-inactive { border-bottom: 2px solid transparent; color: #9ca3af; }
+        .custom-checkbox:checked {
+            background-color: #4285F4;
+            border-color: #4285F4;
+        }
+
+        .custom-checkbox:checked::before {
+            transform: scale(1);
+        }
     </style>
 </head>
-<body class="antialiased min-h-screen flex flex-col font-sans relative">
+<body class="text-gray-800 antialiased relative selection:bg-google-blue selection:text-white pb-20">
 
-    <!-- Background Orbs -->
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div class="bg-orb orb-3"></div>
+    <div class="blob-bg bg-google-blue w-96 h-96 top-0 left-0 animate-blob"></div>
+    <div class="blob-bg bg-google-red w-96 h-96 top-40 right-10 animate-blob" style="animation-delay: 2s;"></div>
+    <div class="blob-bg bg-google-yellow w-80 h-80 bottom-0 left-20 animate-blob" style="animation-delay: 4s;"></div>
+    <div class="blob-bg bg-google-green w-96 h-96 bottom-20 right-0 animate-blob" style="animation-delay: 6s;"></div>
 
-    <!-- Header Navigation -->
-    <header class="w-full p-6 flex justify-between items-center z-10 glass-panel !rounded-none !border-t-0 !border-x-0 !border-b-white/10 sticky top-0 bg-black/30">
-        <div class="flex items-center gap-4">
-            <!-- Google G Logo -->
-            <svg class="w-8 h-8" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-            </svg>
-            <span class="text-xl font-medium tracking-wide">Pixel Retail Portal</span>
-        </div>
-        <div class="flex items-center gap-4">
-            <!-- MMS Logo Placeholder -->
-            <div class="flex items-center space-x-1 h-8 hidden sm:flex">
-                <div class="bg-[#df0000] text-white font-bold px-2 py-1 text-sm rounded-l-md italic">MediaMarkt</div>
-                <div class="bg-black text-white font-bold px-2 py-1 text-sm border border-[#df0000] rounded-r-md">SATURN</div>
-            </div>
-        </div>
-    </header>
-
-    <!-- Main Content Area -->
-    <main class="flex-grow flex items-center justify-center p-4 z-10 w-full max-w-7xl mx-auto">
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-16">
         
-        <!-- ================= VIEW 1: LOGIN / REGISTRATION ================= -->
-        <div id="login-view" class="w-full max-w-lg glass-panel p-8 md:p-10 animate-fade-in my-10">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold mb-2">Willkommen</h1>
-                <p class="text-gray-300 text-sm">Bitte melde dich an, um dich für das Pixel Loaner Programm zu registrieren, auf GRT Trainings zuzugreifen und dein TSM Team zu finden.</p>
+        <header class="text-center mb-16 opacity-0 animate-fade-in-up">
+            <div class="inline-flex items-center justify-center p-4 bg-white rounded-full shadow-lg mb-6">
+                <svg class="w-10 h-10 mr-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
+                    <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+                    <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+                    <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+                    <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+                </svg>
+                <span class="text-2xl font-bold tracking-tight text-gray-700">Pixel</span>
+            </div>
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-gray-900 leading-tight">
+                📣 Pixel Bootcamp
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-700 font-light max-w-3xl mx-auto glass p-6 rounded-2xl">
+                Lass dich zum <span class="font-bold text-google-blue">Pixel-Experten</span> ausbilden! Das Pixel Bootcamp schlägt seine Zelte in drei deutschen Städten auf – und wir fordern dich heraus!
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="glass p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 opacity-0 animate-fade-in-up delay-200">
+                <div class="w-14 h-14 rounded-full bg-google-blue/20 flex items-center justify-center mb-6">
+                    <i class="ph-duotone ph-device-mobile text-3xl text-google-blue"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Deine Ausrüstung</h3>
+                <p class="text-gray-600 leading-relaxed">Du erhältst von uns ein <strong>Pixel 10 Smartphone</strong> mit innovativen KI-Funktionen exklusiv für diesen Tag.</p>
             </div>
 
-            <form id="login-form" class="space-y-5">
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">Position auswählen</label>
-                    <select id="role" required class="w-full p-3 rounded-xl glass-input appearance-none cursor-pointer">
-                        <option value="" disabled selected class="text-gray-500">Bitte wählen...</option>
-                        <option value="GeschäftsführerIn" class="text-black">GeschäftsführerIn</option>
-                        <option value="KoordinatorIn" class="text-black">KoordinatorIn</option>
-                    </select>
+            <div class="glass p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 opacity-0 animate-fade-in-up delay-400">
+                <div class="w-14 h-14 rounded-full bg-google-red/20 flex items-center justify-center mb-6">
+                    <i class="ph-duotone ph-target text-3xl text-google-red"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Deine Mission</h3>
+                <p class="text-gray-600 leading-relaxed">Alltägliche Herausforderungen mit <strong>Gemini</strong> meistern und unschlagbare Pixel-Argumente für deine Kundengespräche zielsicher auf der Verkaufsfläche platzieren.</p>
+            </div>
+
+            <div class="glass p-8 rounded-3xl hover:-translate-y-2 transition-transform duration-300 opacity-0 animate-fade-in-up delay-600">
+                <div class="w-14 h-14 rounded-full bg-google-green/20 flex items-center justify-center mb-6">
+                    <i class="ph-duotone ph-users-three text-3xl text-google-green"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-3">Der Ablauf</h3>
+                <p class="text-gray-600 leading-relaxed">In kleinen Gruppen schicken wir euch durch <strong>fünf aufregende Stationen</strong> - Action garantiert! Findet als Team kreative Lösungen, sammelt Punkte und sichert euch eure Belohnung.</p>
+            </div>
+        </div>
+
+        <section class="mb-16 glass rounded-3xl p-8 md:p-12 text-center opacity-0 animate-fade-in-up delay-400">
+            <h2 class="text-2xl font-bold mb-8">Die 5 Stationen</h2>
+            <div class="flex flex-wrap justify-center gap-8 md:gap-16">
+                <div class="flex flex-col items-center group">
+                    <div class="w-20 h-20 rounded-full bg-[#ff7b5e]/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="ph-duotone ph-cooking-pot text-4xl text-[#ff7b5e]"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Kochen</span>
+                </div>
+                <div class="flex flex-col items-center group">
+                    <div class="w-20 h-20 rounded-full bg-google-green/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="ph-duotone ph-soccer-ball text-4xl text-google-green"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Sport</span>
+                </div>
+                <div class="flex flex-col items-center group">
+                    <div class="w-20 h-20 rounded-full bg-[#1db1d6]/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="ph-duotone ph-suitcase-rolling text-4xl text-[#1db1d6]"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Reisen</span>
+                </div>
+                <div class="flex flex-col items-center group">
+                    <div class="w-20 h-20 rounded-full bg-google-purple/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="ph-duotone ph-headphones text-4xl text-google-purple"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Music</span>
+                </div>
+                <div class="flex flex-col items-center group">
+                    <div class="w-20 h-20 rounded-full bg-google-yellow/20 flex items-center justify-center mb-3 group-hover:scale-110 transition-transform">
+                        <i class="ph-duotone ph-brain text-4xl text-google-yellow"></i>
+                    </div>
+                    <span class="font-semibold text-gray-700">Quiz</span>
+                </div>
+            </div>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-16 opacity-0 animate-fade-in-up delay-600">
+            <div class="glass p-8 rounded-3xl">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <span class="text-2xl mr-2">📍</span> Wann & Wo
+                </h3>
+                <p class="mb-4">Du hast die Auswahl zwischen 3 Terminen in <strong>Berlin, Hamburg und München</strong>.</p>
+                <p class="flex items-center text-gray-600">
+                    <i class="ph-duotone ph-clock text-xl mr-2 text-google-blue"></i>
+                    Zwischen 11:00 und 16:00 Uhr, mit einer Pause von 60 Minuten.
+                </p>
+            </div>
+            
+            <div class="glass p-8 rounded-3xl">
+                <h3 class="text-xl font-bold mb-4 flex items-center">
+                    <span class="text-2xl mr-2">🍕</span> Verpflegung
+                </h3>
+                <p>Für eine angemessene Stärkung (Mittagessen & Drinks) ist an allen Standorten gesorgt.</p>
+            </div>
+
+            <div class="glass p-8 rounded-3xl md:col-span-2 border-l-4 border-l-google-red">
+                <h3 class="text-xl font-bold mb-2 flex items-center">
+                    <span class="text-2xl mr-2">❗</span> Wichtiger Hinweis
+                </h3>
+                <p class="text-gray-700">Die Kosten für deine An- und Abreise werden nicht über Google getragen. Bitte sprich vor der Anmeldung mit deinem Vorgesetzten. Diesen haben wir über die Hauptverwaltung bereits informiert.</p>
+            </div>
+        </div>
+
+        <section id="anmeldung" class="glass-dark rounded-[2.5rem] p-8 md:p-12 shadow-2xl relative overflow-hidden">
+            <div class="absolute -top-20 -right-20 w-64 h-64 bg-google-blue/10 rounded-full blur-2xl pointer-events-none"></div>
+            
+            <div class="text-center mb-10 relative z-10">
+                <h2 class="text-3xl font-bold mb-4">Wappne dich für das nächste Level!</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Die Plätze pro Bootcamp sind auf <strong>40 Personen begrenzt</strong>. Schnell sein lohnt sich! Melde dich jetzt über das Menü an.</p>
+            </div>
+
+            <form id="registrationForm" class="max-w-xl mx-auto relative z-10">
+                
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="location">
+                        Wähle deinen Standort & Termin <span class="text-google-red">*</span>
+                    </label>
+                    <div class="relative">
+                        <select id="location" required class="block appearance-none w-full bg-white/50 border border-gray-300 text-gray-700 py-3 px-4 pr-8 rounded-xl leading-tight focus:outline-none focus:bg-white focus:border-google-blue focus:ring-2 focus:ring-google-blue/20 transition-all cursor-pointer backdrop-blur-sm">
+                            <option value="" disabled selected>Dropdown-Menü öffnen...</option>
+                            <option value="berlin">📍 Berlin | 05.05.2026 | 11:00 - 16:00 Uhr</option>
+                            <option value="muenchen">📍 München | 09.06.2026 | 11:00 - 16:00 Uhr</option>
+                            <option value="hamburg">📍 Hamburg | 23.06.2026 | 11:00 - 16:00 Uhr</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-700">
+                            <i class="ph-bold ph-caret-down"></i>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="mb-6 grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Vorname</label>
-                        <input type="text" id="firstname" required class="w-full p-3 rounded-xl glass-input" placeholder="Max">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="vorname">Vorname <span class="text-google-red">*</span></label>
+                        <input class="w-full bg-white/50 border border-gray-300 text-gray-700 py-3 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-google-blue focus:ring-2 focus:ring-google-blue/20 transition-all" id="vorname" type="text" required placeholder="Max">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-gray-300 mb-1">Nachname</label>
-                        <input type="text" id="lastname" required class="w-full p-3 rounded-xl glass-input" placeholder="Mustermann">
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="nachname">Nachname <span class="text-google-red">*</span></label>
+                        <input class="w-full bg-white/50 border border-gray-300 text-gray-700 py-3 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-google-blue focus:ring-2 focus:ring-google-blue/20 transition-all" id="nachname" type="text" required placeholder="Mustermann">
                     </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">Marktnummer</label>
-                    <input type="text" id="storenumber" required class="w-full p-3 rounded-xl glass-input" placeholder="z.B. 1234">
+                <div class="mb-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Geschäftliche E-Mail <span class="text-google-red">*</span></label>
+                    <input class="w-full bg-white/50 border border-gray-300 text-gray-700 py-3 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-google-blue focus:ring-2 focus:ring-google-blue/20 transition-all" id="email" type="email" required placeholder="name@markt.de">
+                </div>
+                
+                <div class="mb-8 grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Loaner Programm <span class="text-google-red">*</span></label>
+                        <div class="bg-white/50 border border-gray-300 rounded-xl p-3">
+                            <p class="text-xs text-gray-700 mb-3">Hast du Interesse an einem Leihhandy (Loaner)?</p>
+                            <div class="flex flex-col sm:flex-row gap-4">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="loaner" value="Ja, gerne" required class="mr-2 w-4 h-4 text-google-blue focus:ring-google-blue">
+                                    <span class="text-sm text-gray-700">Ja, gerne</span>
+                                </label>
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="radio" name="loaner" value="Nein, danke" required class="mr-2 w-4 h-4 text-google-blue focus:ring-google-blue">
+                                    <span class="text-sm text-gray-700">Nein, danke</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 text-sm font-bold mb-2" for="markt">Dein Markt / Filiale <span class="text-google-red">*</span></label>
+                        <input class="w-full bg-white/50 border border-gray-300 text-gray-700 py-3 px-4 rounded-xl focus:outline-none focus:bg-white focus:border-google-blue focus:ring-2 focus:ring-google-blue/20 transition-all h-[76px]" id="markt" type="text" required placeholder="z.B. Saturn Alexanderplatz">
+                    </div>
                 </div>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-300 mb-1">E-Mail Adresse</label>
-                    <input type="email" id="email" required class="w-full p-3 rounded-xl glass-input" placeholder="max.mustermann@mediamarktsaturn.com">
-                </div>
-
-                <div class="mt-6 bg-black/20 p-4 rounded-xl border border-white/5">
-                    <label class="flex items-start gap-3 cursor-pointer">
-                        <input type="checkbox" id="privacy-check" class="mt-1 w-5 h-5 rounded border-gray-400 bg-transparent text-google-blue focus:ring-google-blue focus:ring-offset-gray-900 cursor-pointer">
-                        <span class="text-xs text-gray-300 leading-relaxed">
-                            Ich bin damit einverstanden, dass meine von mir angegebenen personenbezogenen Daten (Name, Vorname, Marktnummer sowie meine E-Mail-Adresse) von der TMS Personal GmbH zum Zweck der Bereitstellung des Google Pixel Portals, der Organisation des Loaner Programms sowie zur Verarbeitung meines Feedbacks verarbeitet und genutzt werden dürfen. Dies beinhaltet auch die Kontaktaufnahme zur weiteren Abstimmung des Leihgerätes. Diese Einwilligung ist freiwillig und kann jederzeit mit Wirkung für die Zukunft gegenüber der TMS Personal GmbH widerrufen werden.
-                        </span>
+                <!-- Datenschutz Checkbox -->
+                <div class="mb-8 p-4 bg-white/40 rounded-xl border border-gray-200">
+                    <label class="flex items-start cursor-pointer">
+                        <div class="flex-shrink-0 mt-1 mr-3">
+                            <input type="checkbox" id="datenschutz" required class="custom-checkbox">
+                        </div>
+                        <div class="text-xs text-gray-600 leading-relaxed">
+                            <span class="font-bold block mb-1">Datenschutzbestimmungen <span class="text-google-red">*</span></span>
+                            Ich bin damit einverstanden, dass meine von mir angegebenen personenbezogenen Daten (Name, Vorname sowie meine E-Mail-Adresse) von der TMS Personal GmbH zum Zweck der Organisation und Durchführung der Terminabfrage für [Pixel Bootcamp] verarbeitet und genutzt werden dürfen. Dies beinhaltet die Erfassung meiner Rückmeldung zur Teilnahme sowie die Kontaktaufnahme zur weiteren terminlichen Abstimmung. Diese Einwilligung ist freiwillig und kann jederzeit mit Wirkung für die Zukunft gegenüber der TMS Personal GmbH widerrufen werden.
+                        </div>
                     </label>
                 </div>
 
-                <button type="submit" id="submit-login" disabled class="w-full py-4 mt-6 rounded-xl font-semibold text-white bg-white/10 border border-white/20 opacity-50 cursor-not-allowed transition-all duration-300">
-                    Weiter zum Portal
+                <button id="submitBtn" type="submit" class="w-full bg-google-blue hover:bg-blue-600 text-white font-bold py-4 px-8 rounded-xl transition-colors duration-300 shadow-lg flex items-center justify-center group">
+                    <span id="btnText">Absenden</span>
+                    <i id="btnIcon" class="ph-bold ph-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
                 </button>
             </form>
-        </div>
 
-
-        <!-- ================= VIEW 2: DASHBOARD ================= -->
-        <div id="dashboard-view" class="w-full hidden-view py-10">
-            <div class="mb-10">
-                <h1 class="text-4xl md:text-5xl font-bold mb-2">Hallo <span id="user-display-name" class="text-google-blue"></span>,</h1>
-                <p class="text-xl text-gray-300">Willkommen in deinem persönlichen Pixel Portal (<span id="user-display-role"></span>, Markt <span id="user-display-store"></span>).</p>
-            </div>
-
-            <!-- Dashboard Grid -->
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="successMessage" class="hidden max-w-xl mx-auto text-center py-12 relative z-10">
+                <div class="w-20 h-20 bg-google-green text-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <i class="ph-bold ph-check text-4xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-4">Anmeldung erfolgreich!</h3>
+                <p class="text-gray-700 mb-6">Nach erfolgreicher Prüfung deiner Anmeldung erhältst du eine Bestätigung und weitere Informationen per E-Mail.</p>
+                <p class="font-bold text-lg">Wir freuen uns auf DICH 🙂<br><span class="text-google-blue">Dein #TeamPixel</span></p>
                 
-                <!-- Card 1: Loaner Programm -->
-                <div class="glass-panel p-6 flex flex-col relative overflow-hidden group">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-google-blue rounded-full filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <div class="mb-4 bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/10">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-2">Loaner Programm</h2>
-                    <p class="text-gray-300 text-sm mb-6 flex-grow">Erlebe das Google Pixel selbst. Melde dich hier für ein exklusives Leihhandy für ein gesamtes Jahr an und entdecke alle KI-Funktionen im Alltag.</p>
-                    <button id="btn-loaner" class="w-full py-3 rounded-lg bg-google-blue hover:bg-blue-600 text-white font-medium transition-colors shadow-[0_0_15px_rgba(66,133,244,0.4)]">
-                        Jetzt für 1 Jahr sichern
-                    </button>
-                    <div id="loaner-success" class="hidden mt-3 text-sm text-green-400 font-medium text-center">
-                        Erfolgreich eingetragen! Wir kontaktieren dich in Kürze.
-                    </div>
-                </div>
-
-                <!-- Card 2: GRT Training -->
-                <div class="glass-panel p-6 flex flex-col relative overflow-hidden group">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-google-green rounded-full filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <div class="mb-4 bg-white/10 w-12 h-12 rounded-full flex items-center justify-center border border-white/10">
-                        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"></path></svg>
-                    </div>
-                    <h2 class="text-2xl font-bold mb-2">Google Retail Training</h2>
-                    <p class="text-gray-300 text-sm mb-6 flex-grow">Steigere dein Wissen! Greife auf die offizielle GRT-Plattform zu, um die neuesten Trainings zu Pixel, Fitbit und Nest abzuschließen.</p>
-                    <a href="https://googleretailtraining.exceedlms.com/student/catalog" target="_blank" rel="noopener noreferrer" class="w-full py-3 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white font-medium transition-colors text-center block">
-                        Zum GRT Portal
-                    </a>
-                </div>
-
-                <!-- Card 3: Feedback & Training Choice -->
-                <div class="glass-panel p-6 flex flex-col relative overflow-hidden group lg:col-span-1 md:col-span-2">
-                    <div class="absolute -right-10 -top-10 w-32 h-32 bg-google-yellow rounded-full filter blur-3xl opacity-20 group-hover:opacity-40 transition-opacity"></div>
-                    <h2 class="text-2xl font-bold mb-4">Dein Feedback</h2>
-                    
-                    <form id="feedback-form" class="space-y-4 flex-grow">
-                        <!-- Q1 -->
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-1">Würdest du das Google Pixel weiterempfehlen?</label>
-                            <div class="flex flex-row-reverse justify-end gap-1 star-rating" id="rating-recommend">
-                                <input type="radio" id="rec-5" name="recommend" value="5" required><label for="rec-5" title="5 Sterne"></label>
-                                <input type="radio" id="rec-4" name="recommend" value="4"><label for="rec-4" title="4 Sterne"></label>
-                                <input type="radio" id="rec-3" name="recommend" value="3"><label for="rec-3" title="3 Sterne"></label>
-                                <input type="radio" id="rec-2" name="recommend" value="2"><label for="rec-2" title="2 Sterne"></label>
-                                <input type="radio" id="rec-1" name="recommend" value="1"><label for="rec-1" title="1 Stern"></label>
-                            </div>
-                        </div>
-
-                        <!-- Q2 -->
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-1">Wie hilfreich war das Training?</label>
-                            <div class="flex flex-row-reverse justify-end gap-1 star-rating" id="rating-training">
-                                <input type="radio" id="trn-5" name="training_help" value="5" required><label for="trn-5"></label>
-                                <input type="radio" id="trn-4" name="training_help" value="4"><label for="trn-4"></label>
-                                <input type="radio" id="trn-3" name="training_help" value="3"><label for="trn-3"></label>
-                                <input type="radio" id="trn-2" name="training_help" value="2"><label for="trn-2"></label>
-                                <input type="radio" id="trn-1" name="training_help" value="1"><label for="trn-1"></label>
-                            </div>
-                        </div>
-
-                        <!-- Q3 -->
-                        <div>
-                            <label class="block text-sm text-gray-300 mb-2">Welches Trainingsformat wünschst du dir?</label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="format" value="Vor Ort" required class="text-google-yellow focus:ring-google-yellow bg-transparent border-gray-400">
-                                    <span class="text-sm">Vor Ort</span>
-                                </label>
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="format" value="Digital" class="text-google-yellow focus:ring-google-yellow bg-transparent border-gray-400">
-                                    <span class="text-sm">Digital</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <!-- Q4: Interesse am Leihhandy -->
-                        <div class="pt-2 border-t border-white/10">
-                            <label class="block text-sm text-gray-300 mb-2">Hast du Interesse an einem Leihhandy (Loaner)?</label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="loaner_interest" value="Ja" required class="text-google-blue focus:ring-google-blue bg-transparent border-gray-400">
-                                    <span class="text-sm">Ja, gerne</span>
-                                </label>
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="loaner_interest" value="Nein" class="text-google-blue focus:ring-google-blue bg-transparent border-gray-400">
-                                    <span class="text-sm">Nein, danke</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <button type="submit" class="w-full py-2.5 mt-2 rounded-lg bg-white/10 hover:bg-white/20 border border-white/30 text-white font-medium transition-colors text-sm">
-                            Feedback absenden
-                        </button>
-                        <div id="feedback-success" class="hidden text-sm text-green-400 mt-2 text-center">Vielen Dank für dein Feedback!</div>
-                    </form>
-                </div>
-
-                <!-- Card 4: TSM Team (Launcher for Modal) -->
-                <div class="glass-panel p-6 relative overflow-hidden lg:col-span-3 md:col-span-2 flex flex-col md:flex-row items-center justify-between text-center md:text-left gap-6 group cursor-pointer" onclick="openTsmModal()">
-                    <div class="absolute -right-20 top-1/2 -translate-y-1/2 w-64 h-64 bg-google-red rounded-full filter blur-[100px] opacity-10 group-hover:opacity-30 transition-opacity"></div>
-                    
-                    <div class="flex items-center gap-6">
-                        <div class="bg-white/10 p-4 rounded-full border border-white/10">
-                            <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-bold mb-1">Deine TSM Teams</h2>
-                            <p class="text-gray-300 text-sm">Entdecke deine Ansprechpartner für die Regionen North und West.</p>
-                        </div>
-                    </div>
-                    
-                    <button class="py-3 px-8 rounded-lg bg-white text-black hover:bg-gray-200 font-bold transition-colors whitespace-nowrap shadow-lg">
-                        Übersicht öffnen
-                    </button>
-                </div>
-
+                <button id="resetBtn" type="button" class="mt-8 text-gray-500 hover:text-google-blue underline">Weitere Person anmelden</button>
             </div>
-        </div>
+            
+            <div class="mt-12 pt-6 border-t border-gray-200/50 flex justify-center items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-300">
+                <span class="font-bold text-xl">Google Pixel</span>
+                <span class="w-px h-6 bg-gray-400"></span>
+                <span class="font-bold">MediaMarkt</span>
+                <span class="font-bold">SATURN</span>
+            </div>
+        </section>
+
+        <footer class="text-center py-12 text-gray-500 text-sm flex flex-col items-center">
+            <p>Einladung - Internes Dokument</p>
+        </footer>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="text-center p-6 text-xs text-gray-500 z-10 relative">
-        &copy; 2026 TMS Personal GmbH | Bereitgestellt für das Google Retail Projekt.
-    </footer>
-
-    <!-- ================= TSM MODAL (EXTRA WINDOW MIT MAP & PFEILEN) ================= -->
-    <div id="tsm-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-md flex items-center justify-center p-4 lg:p-10 opacity-0 transition-opacity duration-300">
-        
-        <div class="glass-panel w-full max-w-7xl h-[95vh] flex flex-col relative transform scale-95 transition-transform duration-300" id="tsm-modal-content">
-            
-            <!-- Header & Tabs -->
-            <div class="flex flex-col sm:flex-row justify-between items-center p-6 border-b border-white/10 gap-4 relative z-30 bg-black/20 rounded-t-3xl">
-                <h2 class="text-2xl font-bold tracking-wider">TSM TEAM KONTAKTE</h2>
-                
-                <!-- Tab Buttons -->
-                <div class="flex gap-6 font-medium text-lg">
-                    <button onclick="switchTab('north')" id="tab-btn-north" class="pb-1 tab-active transition-colors hover:text-white">REGION NORTH</button>
-                    <button onclick="switchTab('west')" id="tab-btn-west" class="pb-1 tab-inactive transition-colors hover:text-white">REGION WEST</button>
-                </div>
-
-                <button onclick="closeTsmModal()" class="text-gray-400 hover:text-white p-2 bg-white/5 rounded-full transition-colors absolute sm:static right-4 top-4">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
-            </div>
-
-            <!-- Scrollable Content Area -->
-            <div class="flex-grow overflow-y-auto overflow-x-hidden p-6 relative flex flex-col">
-                
-                <!-- ================= TAB: REGION NORTH ================= -->
-                <div id="tab-north" class="block animate-fade-in flex-grow flex items-center justify-center">
-                    <img src="https://i.postimg.cc/52s4CQ6G/Gemini-Generated-Image-rq2nb3rq2nb3rq2n.png" alt="TSM Team Region North" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl">
-                </div>
-
-                <!-- ================= TAB: REGION WEST ================= -->
-                <div id="tab-west" class="hidden animate-fade-in flex-grow items-center justify-center">
-                    <img src="https://i.postimg.cc/mk3R2tvn/Gemini-Generated-Image-gped7vgped7vgped.png" alt="TSM Team Region West" class="max-w-full max-h-full object-contain rounded-xl shadow-2xl">
-                </div>
-
-            </div>
-        </div>
-    </div>
-
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzVqWsjdepY90uq1yREHvreTBIe0t-8xTV5UBZX-kyG-0A6kYzSWkQ5a7rQp9CFvbTcSA/exec';
-        
-        let currentUserData = {};
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxEogXSa-h4BFaKmFoTINLB7wn2Slp4yO7G9uGBgqZxReurpKH2Fic1hK8gZles5JL4/exec";
 
-        function sendDataToSheet(eventType, additionalData = {}) {
-            if (!SCRIPT_URL || SCRIPT_URL === '') return;
-            const payload = { eventType: eventType, ...currentUserData, ...additionalData };
-            fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
-            }).catch(error => console.error('Fehler beim Senden:', error));
-        }
+        document.getElementById('registrationForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            if (GOOGLE_SCRIPT_URL === 'DEINE_WEB_APP_URL_HIER_EINTRAGEN') {
+                alert("Bitte trage zuerst die Google Apps Script URL im Code ein (Zeile GOOGLE_SCRIPT_URL)!");
+                return;
+            }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            const privacyCheck = document.getElementById('privacy-check');
-            const submitLoginBtn = document.getElementById('submit-login');
-            const loginForm = document.getElementById('login-form');
-            const loginView = document.getElementById('login-view');
-            const dashboardView = document.getElementById('dashboard-view');
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnIcon = document.getElementById('btnIcon');
 
-            privacyCheck.addEventListener('change', (e) => {
-                if(e.target.checked) {
-                    submitLoginBtn.disabled = false;
-                    submitLoginBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-white/10');
-                    submitLoginBtn.classList.add('bg-white', 'text-black', 'hover:bg-gray-200');
-                } else {
-                    submitLoginBtn.disabled = true;
-                    submitLoginBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-white/10');
-                    submitLoginBtn.classList.remove('bg-white', 'text-black', 'hover:bg-gray-200');
-                }
-            });
+            btn.disabled = true;
+            btnText.innerText = 'Wird gesendet...';
+            btnIcon.classList.replace('ph-arrow-right', 'ph-spinner');
+            btnIcon.classList.add('animate-spin');
 
-            loginForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const role = document.getElementById('role').value;
-                const firstname = document.getElementById('firstname').value;
-                const lastname = document.getElementById('lastname').value;
-                const store = document.getElementById('storenumber').value;
-                const email = document.getElementById('email').value;
+            const payload = {
+                location: document.getElementById('location').value,
+                vorname: document.getElementById('vorname').value,
+                nachname: document.getElementById('nachname').value,
+                email: document.getElementById('email').value,
+                markt: document.getElementById('markt').value,
+                loaner: document.querySelector('input[name="loaner"]:checked').value
+            };
 
-                currentUserData = { role, firstname, lastname, storenumber: store, email };
-                sendDataToSheet('Login');
-
-                document.getElementById('user-display-name').textContent = firstname;
-                document.getElementById('user-display-role').textContent = role;
-                document.getElementById('user-display-store').textContent = store;
-
-                loginView.classList.add('hidden-view');
-                dashboardView.classList.remove('hidden-view');
-                dashboardView.classList.add('animate-fade-in');
-            });
-
-            const btnLoaner = document.getElementById('btn-loaner');
-            const loanerSuccess = document.getElementById('loaner-success');
-            btnLoaner.addEventListener('click', () => {
-                btnLoaner.innerHTML = `
-                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Wird verarbeitet...
-                `;
-                sendDataToSheet('Loaner Anmeldung');
-                setTimeout(() => {
-                    btnLoaner.style.display = 'none';
-                    loanerSuccess.classList.remove('hidden');
-                }, 1500);
-            });
-
-            const feedbackForm = document.getElementById('feedback-form');
-            const feedbackSuccess = document.getElementById('feedback-success');
-            feedbackForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const submitBtn = feedbackForm.querySelector('button[type="submit"]');
-                submitBtn.textContent = 'Sende...';
-                
-                const recommend = feedbackForm.querySelector('input[name="recommend"]:checked')?.value || '';
-                const training = feedbackForm.querySelector('input[name="training_help"]:checked')?.value || '';
-                const format = feedbackForm.querySelector('input[name="format"]:checked')?.value || '';
-                const loanerInterest = feedbackForm.querySelector('input[name="loaner_interest"]:checked')?.value || '';
-
-                sendDataToSheet('Feedback', { 
-                    recommend: recommend, 
-                    training_help: training, 
-                    format: format,
-                    loaner_interest: loanerInterest
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(payload),
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    }
                 });
 
-                setTimeout(() => {
-                    submitBtn.style.display = 'none';
-                    feedbackSuccess.classList.remove('hidden');
-                }, 1000);
-            });
-        });
-
-        /* --- MODAL LOGIC --- */
-        const tsmModal = document.getElementById('tsm-modal');
-        const tsmModalContent = document.getElementById('tsm-modal-content');
-
-        function openTsmModal() {
-            tsmModal.classList.remove('hidden');
-            void tsmModal.offsetWidth;
-            tsmModal.classList.remove('opacity-0');
-            tsmModalContent.classList.remove('scale-95');
-        }
-
-        function closeTsmModal() {
-            tsmModal.classList.add('opacity-0');
-            tsmModalContent.classList.add('scale-95');
-            setTimeout(() => {
-                tsmModal.classList.add('hidden');
-            }, 300);
-        }
-
-        tsmModal.addEventListener('click', (e) => {
-            if (e.target === tsmModal) {
-                closeTsmModal();
+                document.getElementById('registrationForm').classList.add('hidden');
+                document.getElementById('successMessage').classList.remove('hidden');
+                window.scrollTo({ top: document.getElementById('anmeldung').offsetTop - 50, behavior: 'smooth' });
+            } catch (error) {
+                console.error("Sende-Fehler:", error);
+                alert("Verbindung zur Tabelle fehlgeschlagen. Bitte überprüfe deine Internetverbindung.");
+            } finally {
+                btn.disabled = false;
+                btnText.innerText = 'Absenden';
+                btnIcon.classList.remove('animate-spin');
+                btnIcon.classList.replace('ph-spinner', 'ph-arrow-right');
+                document.getElementById('registrationForm').reset();
             }
         });
 
-        /* --- TAB SWITCHING LOGIC --- */
-        function switchTab(region) {
-            const tabNorth = document.getElementById('tab-north');
-            const tabWest = document.getElementById('tab-west');
-            const btnNorth = document.getElementById('tab-btn-north');
-            const btnWest = document.getElementById('tab-btn-west');
-
-            if(region === 'north') {
-                tabNorth.classList.remove('hidden');
-                tabNorth.classList.add('flex'); // Add flex back for centering
-                tabWest.classList.add('hidden');
-                tabWest.classList.remove('flex');
-                btnNorth.className = 'pb-1 tab-active transition-colors hover:text-white';
-                btnWest.className = 'pb-1 tab-inactive transition-colors hover:text-white';
-            } else {
-                tabWest.classList.remove('hidden');
-                tabWest.classList.add('flex'); // Add flex back for centering
-                tabNorth.classList.add('hidden');
-                tabNorth.classList.remove('flex');
-                btnWest.className = 'pb-1 tab-active transition-colors hover:text-white';
-                btnNorth.className = 'pb-1 tab-inactive transition-colors hover:text-white';
-            }
-        }
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            document.getElementById('registrationForm').classList.remove('hidden');
+            document.getElementById('successMessage').classList.add('hidden');
+        });
     </script>
 </body>
 </html>
