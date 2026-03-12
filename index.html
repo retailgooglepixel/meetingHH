@@ -258,10 +258,10 @@
                             <label class="block text-sm text-gray-300 mb-1">Wie hilfreich war das Training?</label>
                             <div class="flex flex-row-reverse justify-end gap-1 star-rating" id="rating-training">
                                 <input type="radio" id="trn-5" name="training_help" value="5" required><label for="trn-5"></label>
-                                <input type="radio" id="trn-4" name="training_help" value="4"><label for="trn-4"></label>
-                                <input type="radio" id="trn-3" name="training_help" value="3"><label for="trn-3"></label>
-                                <input type="radio" id="trn-2" name="training_help" value="2"><label for="trn-2"></label>
-                                <input type="radio" id="trn-1" name="training_help" value="1"><label for="trn-1"></label>
+                                <input type="radio" id="trn-4" name="training_help" value="4"></label>
+                                <input type="radio" id="trn-3" name="training_help" value="3"></label>
+                                <input type="radio" id="trn-2" name="training_help" value="2"></label>
+                                <input type="radio" id="trn-1" name="training_help" value="1"></label>
                             </div>
                         </div>
 
@@ -394,11 +394,12 @@
                 if(e.target.checked) {
                     submitLoginBtn.disabled = false;
                     submitLoginBtn.classList.remove('opacity-50', 'cursor-not-allowed', 'bg-white/10');
-                    submitLoginBtn.classList.add('bg-white', 'text-black', 'hover:bg-gray-200');
+                    // ÄNDERUNG: Dunkles Grau mit weißer Schrift
+                    submitLoginBtn.classList.add('bg-zinc-800', 'text-white', 'hover:bg-zinc-700', 'border-zinc-700');
                 } else {
                     submitLoginBtn.disabled = true;
                     submitLoginBtn.classList.add('opacity-50', 'cursor-not-allowed', 'bg-white/10');
-                    submitLoginBtn.classList.remove('bg-white', 'text-black', 'hover:bg-gray-200');
+                    submitLoginBtn.classList.remove('bg-zinc-800', 'text-white', 'hover:bg-zinc-700', 'border-zinc-700');
                 }
             });
 
